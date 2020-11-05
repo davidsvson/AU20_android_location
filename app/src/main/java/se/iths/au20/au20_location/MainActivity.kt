@@ -24,8 +24,9 @@ class MainActivity : AppCompatActivity() {
         locationProvider = LocationServices.getFusedLocationProviderClient(this)
 
         locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
 
+            // kommer att köras när vi får en uppdaterad position ( i vårt fall cirka varannan sekund)
+            override fun onLocationResult(locationResult: LocationResult) {
                 for(location in locationResult.locations ) {
                     Log.d("!!!", "lat: ${location.latitude} lng: ${location.longitude}" )
                 }
@@ -53,23 +54,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         startLocationUpdates()
     }
 
     override fun onPause() {
         super.onPause()
-
         stopLocationUpdates()
     }
-
 
     fun startLocationUpdates() {
         if( ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
             locationProvider.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         }
-
     }
 
     fun stopLocationUpdates() {
@@ -83,8 +80,7 @@ class MainActivity : AppCompatActivity() {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
-
-
+    // körs när användaren har tryckt på antingen ja eller nej till att ge tillåtelse att använda GPS
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if(requestCode == REQUEST_LOCATION ) {
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
@@ -96,7 +92,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
 }
 
 //1. locationmanager

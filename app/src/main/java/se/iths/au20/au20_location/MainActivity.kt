@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
 
         locationProvider = LocationServices.getFusedLocationProviderClient(this)
 
+        // alternativt sätt att skapa vår locationcallback
+        // locationCallback = MyCustomLocationCallBack()
+
+        // skapa en ny anonym klass som ärver av LocationCallback och skapa ett object av denna anonyma class
         locationCallback = object : LocationCallback() {
 
             // kommer att köras när vi får en uppdaterad position ( i vårt fall cirka varannan sekund)
@@ -38,6 +42,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("!!!", "no permission")
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
              REQUEST_LOCATION)
+
         } else {
             locationProvider.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
@@ -73,12 +78,28 @@ class MainActivity : AppCompatActivity() {
         locationProvider.removeLocationUpdates(locationCallback)
     }
 
+
     fun creatLocationRequest()  =
         LocationRequest.create().apply{
             interval = 2000
             fastestInterval = 1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
+
+
+/* Alternativt sätt att skriva samma sak
+    fun creatLocationRequest() : LocationRequest{
+        val request = LocationRequest.create()
+
+        request.interval = 2000
+        request.fastestInterval = 1000
+        request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+
+        return request
+    }
+    */
+
+
 
     // körs när användaren har tryckt på antingen ja eller nej till att ge tillåtelse att använda GPS
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
